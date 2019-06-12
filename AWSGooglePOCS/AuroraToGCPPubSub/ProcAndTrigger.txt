@@ -1,0 +1,29 @@
+PROC
+CREATE PROCEDURE SNS_Publish_Message (IN id int(4) unsigned,IN fname VARCHAR(30),IN lname VARCHAR(30),
+                                      IN address VARCHAR(255),IN city VARCHAR(80),IN telephone VARCHAR(20)) LANGUAGE SQL 
+BEGIN
+  CALL mysql.lambda_async('arn:aws:lambda:us-east-1:478054140975:function:example_function', 
+     CONCAT('{ "id" : "', id, 
+            '","fname" : "', fname, 
+            '","lname" : "', lname, 
+            '","address" : "',address, 
+            '","city" : "', city, 
+            '","telephone" : "', telephone, '" }')
+     );
+END
+
+
+
+
+Trigger:
+
+DELIMITER ;;
+CREATE TRIGGER TR_Owners_AI 
+  AFTER INSERT ON petclinic.owners 
+  FOR EACH ROW
+BEGIN
+  SELECT NEW.id, NEW.first_name,NEW.last_name,NEW.address,NEW.city,NEW.telephone INTO @id,@fname,@lname,@address,@city,@telephone;
+  CALL SNS_Publish_Message(@id,@fname,@lname,@address,@city,@telephone);
+END
+;;
+DELIMITER ;

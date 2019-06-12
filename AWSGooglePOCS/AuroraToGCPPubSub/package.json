@@ -1,0 +1,15 @@
+{
+  "name": "mycilial-package",
+  "version": "1.0.0",
+  "description": "This is a mycilial package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martand Mishra",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/pubsub": "0.16.4",
+    "sns-validator": "^0.3.4"
+  }
+}
